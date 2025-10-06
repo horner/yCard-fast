@@ -198,10 +198,29 @@ mod tests {
 
     #[test]
     fn test_lenient_validation() {
+        use crate::schema::Phone;
+        use crate::generated_types::PhoneType;
+        
         let validator = Validator::new(ValidationMode::Lenient);
-        let ycard = YCard::default();
+        // Create a YCard with bad phone format to trigger lenient validation warning
+        let ycard = YCard {
+            version: 1,
+            uid: None,
+            name: None,
+            phones: Some(vec![Phone {
+                number: "123-456-7890".to_string(), // Bad format - should be E.164
+                r#type: vec![PhoneType::Other],
+                ext: None,
+                preferred: None,
+                label: None,
+            }]),
+            emails: None,
+            addresses: None,
+            metadata: None,
+        };
         
         let diagnostics = validator.validate(&ycard).unwrap();
+        // Should generate warning about bad phone format
         assert!(!diagnostics.is_empty());
         assert!(matches!(diagnostics[0].level, DiagnosticLevel::Warning));
     }
