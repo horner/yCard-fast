@@ -1,0 +1,11 @@
+# Spanish Extended Aliases Test
+# Tests primer_nombre, apellido, trabajo, gerente, etc.
+
+primer_nombre: Carlos
+apellido: Rodriguez
+trabajo: +34-91-123-45-67
+teléfono: +34-600-123-456
+correo: carlos@ejemplo.es
+gerente: jefe@ejemplo.es
+jefe: supervisor@ejemplo.es
+supervisor: director@ejemplo.es

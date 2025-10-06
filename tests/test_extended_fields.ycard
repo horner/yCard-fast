@@ -1,0 +1,8 @@
+# Extended Field Aliases Test
+# Tests first, last, work, manager fields and aliases
+
+first: John
+last: Doe
+work: +1-555-0123
+email: john@company.com
+manager: jane.smith@company.com

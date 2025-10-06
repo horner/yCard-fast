@@ -1,0 +1,11 @@
+# French Extended Aliases Test
+# Tests prénom, nom_famille, travail, responsable, etc.
+
+prénom: Marie
+nom_famille: Dubois
+travail: +33-1-23-45-67-89
+téléphone: +33-6-12-34-56-78
+courriel: marie@exemple.fr
+responsable: chef@exemple.fr
+chef: directeur@exemple.fr
+superviseur: manager@exemple.fr

@@ -216,6 +216,7 @@ mod tests {
             }]),
             emails: None,
             addresses: None,
+            manager: None,
             metadata: None,
         };
         

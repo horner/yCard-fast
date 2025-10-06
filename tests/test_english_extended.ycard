@@ -1,0 +1,12 @@
+# English Extended Aliases Test
+# Tests firstname, lastname, given, family, supervisor, etc.
+
+firstname: Sarah
+lastname: Wilson
+given: Sarah
+family: Wilson
+contact: +1-555-0789
+telephone: +1-555-0790
+cell: +1-555-0791
+email: sarah@example.com
+supervisor: manager@example.com

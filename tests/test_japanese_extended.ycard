@@ -1,0 +1,11 @@
+# Japanese Extended Aliases Test
+# Tests 姓, 名, 会社電話, 管理者, etc.
+
+姓: 田中
+名: 太郎
+会社電話: +81-3-1234-5678
+電話: +81-90-1234-5678
+メール: tanaka@example.jp
+管理者: manager@example.jp
+上司: boss@example.jp
+マネージャー: supervisor@example.jp

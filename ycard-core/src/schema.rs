@@ -10,6 +10,7 @@ pub struct YCard {
     pub phones: Option<Vec<Phone>>,
     pub emails: Option<Vec<Email>>,
     pub addresses: Option<Vec<Address>>,
+    pub manager: Option<String>,
     pub metadata: Option<Metadata>,
 }
 
@@ -84,6 +85,7 @@ impl Default for YCard {
             phones: None,
             emails: None,
             addresses: None,
+            manager: None,
             metadata: None,
         }
     }

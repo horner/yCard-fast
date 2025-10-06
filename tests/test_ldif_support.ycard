@@ -1,0 +1,9 @@
+# LDIF Support Test
+# Tests manager, leader, boss fields for LDAP integration
+
+name: Alice Johnson
+email: alice@company.com
+phone: +1-555-0456
+manager: bob.manager@company.com
+leader: carol.director@company.com
+boss: david.ceo@company.com

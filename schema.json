@@ -213,6 +213,12 @@
         "description": "Physical addresses"
       },
       {
+        "name": "manager",
+        "type": "string",
+        "required": false,
+        "description": "Manager/supervisor reference for LDIF support"
+      },
+      {
         "name": "metadata",
         "type": "Metadata",
         "required": false,
@@ -257,19 +263,19 @@
         "description": "Base locale with core field mappings",
         "keyAliases": {
           "name": "name",
+          "first": "name",
+          "last": "name",
+          "work": "phones",
           "phone": "phones",
           "phones": "phones",
+          "mobile": "phones",
           "email": "emails",
           "emails": "emails",
           "address": "addresses",
           "addresses": "addresses",
-          "mobile": "phones.type:mobile",
-          "cell": "phones.type:mobile",
-          "home": "phones.type:home",
-          "work": "phones.type:work",
-          "fax": "phones.type:fax",
-          "pager": "phones.type:pager",
-          "main": "phones.type:main"
+          "manager": "manager",
+          "leader": "manager",
+          "boss": "manager"
         },
         "typeAliases": {
           "home": "home",
@@ -285,32 +291,42 @@
       "en": {
         "description": "English language aliases",
         "keyAliases": {
-          "first": "name.givenName",
-          "last": "name.familyName",
-          "firstname": "name.givenName",
-          "lastname": "name.familyName",
-          "fullname": "name.displayName"
+          "fullname": "name",
+          "firstname": "name",
+          "lastname": "name",
+          "given": "name",
+          "family": "name",
+          "contact": "phones",
+          "telephone": "phones",
+          "cell": "phones",
+          "supervisor": "manager",
+          "boss": "manager"
         },
         "typeAliases": {}
       },
       "fr": {
         "description": "French language aliases",
         "keyAliases": {
-          "nom": "name.familyName",
-          "prenom": "name.givenName",
-          "prénom": "name.givenName",
+          "nom": "name",
+          "prénom": "name",
+          "prenom": "name",
+          "nom_famille": "name",
+          "travail": "phones",
           "telephone": "phones",
           "téléphone": "phones",
-          "portable": "phones.type:mobile",
-          "domicile": "phones.type:home",
-          "bureau": "phones.type:work",
-          "adresse": "addresses"
+          "adresse": "addresses",
+          "courrier": "emails",
+          "courriel": "emails",
+          "responsable": "manager",
+          "chef": "manager",
+          "superviseur": "manager"
         },
         "typeAliases": {
           "domicile": "home",
           "bureau": "work",
-          "mobile": "mobile",
+          "travail": "work",
           "portable": "mobile",
+          "mobile": "mobile",
           "fax": "fax"
         },
         "countries": {
@@ -326,17 +342,18 @@
       "es": {
         "description": "Spanish language aliases", 
         "keyAliases": {
-          "nombre": "name.givenName",
-          "apellido": "name.familyName",
-          "apellidos": "name.familyName",
+          "nombre": "name",
+          "primer_nombre": "name",
+          "apellido": "name",
+          "trabajo": "phones",
           "telefono": "phones",
           "teléfono": "phones",
-          "movil": "phones.type:mobile",
-          "móvil": "phones.type:mobile",
-          "casa": "phones.type:home",
-          "trabajo": "phones.type:work",
           "direccion": "addresses",
-          "dirección": "addresses"
+          "dirección": "addresses",
+          "correo": "emails",
+          "gerente": "manager",
+          "jefe": "manager",
+          "supervisor": "manager"
         },
         "typeAliases": {
           "casa": "home",
@@ -357,15 +374,16 @@
       "ja": {
         "description": "Japanese language aliases",
         "keyAliases": {
-          "名前": "name.displayName",
-          "姓": "name.familyName",
-          "名": "name.givenName",
+          "名前": "name",
+          "姓": "name",
+          "名": "name",
+          "会社電話": "phones",
           "電話": "phones",
-          "携帯": "phones.type:mobile",
-          "自宅": "phones.type:home",
-          "勤務": "phones.type:work",
-          "会社": "phones.type:work",
-          "住所": "addresses"
+          "住所": "addresses",
+          "メール": "emails",
+          "管理者": "manager",
+          "上司": "manager",
+          "マネージャー": "manager"
         },
         "typeAliases": {
           "自宅": "home",

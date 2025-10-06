@@ -64,6 +64,11 @@ impl Parser {
                                 ycard.version = v as u8;
                             }
                         }
+                        "uid" => {
+                            if let Value::String(s) = val {
+                                ycard.uid = Some(s.clone());
+                            }
+                        }
                         "name" => {
                             ycard.name = Some(self.extract_name(val, locale)?);
                         }
@@ -75,6 +80,11 @@ impl Parser {
                         }
                         "addresses" => {
                             ycard.addresses = Some(self.extract_addresses(val, locale)?);
+                        }
+                        "manager" => {
+                            if let Value::String(s) = val {
+                                ycard.manager = Some(s.clone());
+                            }
                         }
                         "metadata" => {
                             ycard.metadata = Some(self.extract_metadata(val)?);
