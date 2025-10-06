@@ -1,0 +1,19 @@
+[package]
+name = "ycard-cli"
+version = "0.1.0"
+edition = "2021"
+description = "Command-line interface for yCard"
+license = "MIT"
+
+[[bin]]
+name = "ycard"
+path = "src/main.rs"
+
+[dependencies]
+ycard-core = { path = "../ycard-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio = { version = "1.0", features = ["rt-multi-thread", "macros", "fs"] }

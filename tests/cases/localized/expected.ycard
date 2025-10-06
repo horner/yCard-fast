@@ -1,0 +1,14 @@
+version: 1
+name:
+  familyName: [Dupont]
+  givenName: [Jean]
+  displayName: Jean Dupont
+phones:
+  - number: "+33612345678"
+    type: [mobile]
+    preferred: true
+addresses:
+  - formatted: "123 Rue de la Paix, Paris"
+    type: [home]
+metadata:
+  locale: fr

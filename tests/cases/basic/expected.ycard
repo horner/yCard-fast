@@ -1,0 +1,12 @@
+version: 1
+name:
+  displayName: Jane Doe
+phones:
+  - number: "+15551234567"
+    type: [mobile]
+    preferred: true
+emails:
+  - address: "jane@example.com"
+    type: [other]
+metadata:
+  locale: en

@@ -1,0 +1,19 @@
+version: 1
+name:
+  givenName: [Carlos]
+  familyName: ["de la Fuente"]
+  displayName: "Carlos de la Fuente"
+phones:
+  - number: "+34600123456"
+    type: [mobile]
+    preferred: true
+  - number: "+12025550199"
+    ext: "77"
+    type: [work]
+  - number: "+12025550100"
+    type: [fax]
+emails:
+  - address: "carlos@empresa.com"
+    type: [home]
+metadata:
+  locale: "es-ES"

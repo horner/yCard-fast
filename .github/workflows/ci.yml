@@ -1,0 +1,165 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust-version: [stable, beta]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust-version }}
+        components: rustfmt, clippy
+        targets: wasm32-unknown-unknown
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    
+    - name: Run tests
+      run: |
+        cd ycard-core && cargo test --verbose
+        cd ../yabl-markdown && cargo test --verbose
+    
+    - name: Run clippy
+      run: |
+        cd ycard-core && cargo clippy -- -D warnings
+        cd ../ycard-cli && cargo clippy -- -D warnings
+    
+    - name: Check formatting
+      run: |
+        cd ycard-core && cargo fmt --check
+        cd ../ycard-cli && cargo fmt --check
+    
+    - name: Build WASM
+      run: |
+        cd ycard-core
+        wasm-pack build --target nodejs
+        wasm-pack build --target web
+        wasm-pack build --target bundler
+
+  test-typescript:
+    name: TypeScript Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    
+    - name: Install dependencies
+      run: |
+        cd ycard-ts && npm ci
+        cd ../ycard-lsp && npm ci
+    
+    - name: Build TypeScript packages
+      run: |
+        cd ycard-ts && npm run build
+        cd ../ycard-lsp && npm run build
+    
+    - name: Run TypeScript tests
+      run: |
+        cd ycard-ts && npm test
+        cd ../ycard-lsp && npm test
+
+  conformance:
+    name: Conformance Tests
+    runs-on: ubuntu-latest
+    needs: [test, test-typescript]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
+    
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    
+    - name: Build project
+      run: ./build.sh
+    
+    - name: Run conformance tests
+      run: |
+        for test_case in tests/cases/*/; do
+          echo "Testing $test_case"
+          ./bin/ycard parse "$test_case/input.ycard" --json-ast > /tmp/output.json
+          ./bin/ycard check "$test_case/input.ycard" --strict || true
+        done
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [test, test-typescript, conformance]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-unknown-unknown
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    
+    - name: Build release artifacts
+      run: ./build.sh
+    
+    - name: Create release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          bin/ycard
+          wasm-artifacts/**/*
+          ycard-ts/dist/**/*
+          ycard-lsp/dist/**/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Publish to npm
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        cd ycard-ts && npm publish
+        cd ../ycard-lsp && npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

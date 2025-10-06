@@ -1,0 +1,12 @@
+[package]
+name = "yabl-markdown"
+version = "0.1.0"
+edition = "2021"
+description = "Markdown/YABL integration utilities for yCard extraction"
+license = "MIT"
+
+[dependencies]
+regex = "1.10"
+lazy_static = "1.4"
+serde = { workspace = true }
+serde_json = { workspace = true }

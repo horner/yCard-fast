@@ -1,0 +1,12 @@
+[
+  {
+    "level": "warning",
+    "message": "Phone number normalized to E.164 format: +15551234567",
+    "code": "phone-normalized"
+  },
+  {
+    "level": "info", 
+    "message": "Shorthand field 'mobile' expanded to phones array",
+    "code": "shorthand-expanded"
+  }
+]

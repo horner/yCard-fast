@@ -1,0 +1,39 @@
+{
+  "name": "@ycard/lsp",
+  "version": "0.1.0",
+  "description": "Language Server Protocol implementation for yCard",
+  "main": "dist/server.js",
+  "bin": {
+    "ycard-lsp": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "jest"
+  },
+  "keywords": [
+    "ycard",
+    "lsp",
+    "language-server",
+    "yabl"
+  ],
+  "author": "YABL Team",
+  "license": "MIT",
+  "dependencies": {
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11",
+    "vscode-uri": "^3.0.8",
+    "@ycard/core": "file:../ycard-ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yabl-lang/ycard-lsp.git"
+  }
+}

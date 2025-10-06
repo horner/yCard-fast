@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>yCard WASM Test</title>
+</head>
+<body>
+    <h1>yCard WASM Browser Test</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        import init, { yc_clear_aliases } from './pkg-web/ycard_core.js';
+        
+        async function run() {
+            try {
+                await init();
+                
+                const result = yc_clear_aliases();
+                
+                document.getElementById('output').innerHTML = `
+                    <p>✅ yCard WASM module loaded successfully!</p>
+                    <p>Clear aliases result: ${result}</p>
+                    <p>WASM is working in the browser! 🎉</p>
+                `;
+            } catch (error) {
+                document.getElementById('output').innerHTML = `
+                    <p>❌ Error: ${error.message}</p>
+                `;
+            }
+        }
+        
+        run();
+    </script>
+</body>
+</html>

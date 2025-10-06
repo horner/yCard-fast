@@ -1,0 +1,38 @@
+{
+  "name": "@ycard/core",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for yCard with WASM support",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "wasm/**/*"
+  ],
+  "scripts": {
+    "build": "tsc && npm run build:wasm",
+    "build:wasm": "wasm-pack build ../ycard-core --target nodejs --out-dir ../ycard-ts/wasm",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ycard",
+    "contact",
+    "yaml",
+    "wasm",
+    "yabl"
+  ],
+  "author": "YABL Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yabl-lang/ycard-ts.git"
+  }
+}

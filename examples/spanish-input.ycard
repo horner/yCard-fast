@@ -1,0 +1,8 @@
+version: 1
+name: "Carlos de la Fuente"
+móvil: "600 12 34 56"
+trabajo:
+  - "+1 (202) 555-0199 ext. 77"
+  - number: "+1 202 555 0100"
+    tipo: fax
+email: "carlos@empresa.com"

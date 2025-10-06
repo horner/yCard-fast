@@ -1,0 +1,8 @@
+version: 1
+name:
+  displayName: John Doe
+  givenName: [John]
+  familyName: [Doe]
+email: john@example.com
+phone: +1-555-123-4567
+org: YABL Corp
