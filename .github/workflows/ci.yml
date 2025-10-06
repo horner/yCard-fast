@@ -39,24 +39,19 @@ jobs:
         node-version: '20'
     
     - name: Generate code from schema
-      run: node generate-code.js
+      run: make generate
     
     - name: Install wasm-pack
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
     
     - name: Run tests
-      run: |
-        cd ycard-core && cargo test --verbose
+      run: make test
     
     - name: Run clippy
-      run: |
-        cd ycard-core && cargo clippy -- -D warnings
-        cd ../ycard-cli && cargo clippy -- -D warnings
+      run: make clippy-check
     
     - name: Check formatting
-      run: |
-        cd ycard-core && cargo fmt --check
-        cd ../ycard-cli && cargo fmt --check
+      run: make fmt-check
     
     - name: Build WASM
       run: |

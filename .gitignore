@@ -9,6 +9,9 @@ Cargo.lock
 **/*.wasm
 **/*.wasm.d.ts
 
+# Build artifacts
+build-info.json
+
 # Node.js / npm
 node_modules/
 npm-debug.log*

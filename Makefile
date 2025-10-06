@@ -41,6 +41,8 @@ all: core wasm cli
 generate:
 	@echo "$(CYAN)🔄 Generating code from schema...$(NC)"
 	node generate-code.js
+	@echo "$(CYAN)🔧 Formatting generated Rust code...$(NC)"
+	cargo fmt
 	@echo "$(GREEN)✅ Code generation complete$(NC)"
 
 # Build core library
@@ -77,8 +79,20 @@ dev:
 	$(MAKE) BUILD_MODE=debug all
 	$(call print_success,Development build complete!)
 
+# Check code formatting
+fmt-check:
+	$(call print_step,Checking code formatting...)
+	@cargo fmt --check && echo -e "$(GREEN)✅ Code formatting is correct$(NC)" || (echo -e "$(YELLOW)⚠️  Code formatting issues found. Run 'cargo fmt' to fix.$(NC)" && exit 1)
+
+# Run clippy linting
+clippy-check:
+	$(call print_step,Running clippy lints...)
+	@cd ycard-core && cargo clippy -- -D warnings
+	@cd ycard-cli && cargo clippy -- -D warnings
+	$(call print_success,Clippy checks passed)
+
 # CI/CD build with testing and validation
-ci: all test wasm-test cli-test
+ci: all test wasm-test cli-test fmt-check clippy-check
 	$(call print_step,Generating build info...)
 	@echo '{"buildTime":"'$$(date -u +"%Y-%m-%dT%H:%M:%SZ")'","buildMode":"$(BUILD_MODE)","gitCommit":"'$$(git rev-parse HEAD 2>/dev/null || echo unknown)'","artifacts":{"cli":"./target/$(TARGET_DIR)/ycard","wasm":"./ycard-core/pkg*/"}}' > build-info.json
 	$(call print_success,CI build complete with validation!)
