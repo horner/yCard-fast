@@ -76,14 +76,12 @@ sequenceDiagram
 ### 🏗️ Unified Build System
 All build logic is centralized in the **Makefile**. Other scripts are just thin wrappers:
 
-| Command | Purpose | What it does |
-|---------|---------|--------------|
-| `make generate` | **Code Gen** | Generate all code from schema.json |
-| `make` or `make all` | **Main build** | Core + WASM + CLI |
-| `make dev` | **Development** | Debug build (faster) |
-| `make ci` | **CI/CD** | Full build with testing |
-| `make full` | **Complete** | Everything including TypeScript |
-| `make help` | **Help** | Show all available targets |
+- **`make generate`** - Generate all code from schema.json
+- **`make`** or **`make all`** - Core + WASM + CLI (main build)
+- **`make dev`** - Debug build (faster, for development)
+- **`make ci`** - Full build with testing (CI/CD)
+- **`make full`** - Everything including TypeScript (complete)
+- **`make help`** - Show all available targets
 
 ### Wrapper Scripts (all delegate to make)
 - `./build.sh` - Interactive menu
