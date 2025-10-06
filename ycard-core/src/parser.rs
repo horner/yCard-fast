@@ -252,7 +252,7 @@ impl Parser {
                 }
                 Ok(phones)
             }
-            _ => Ok(vec![self.parse_phone_string(&value.as_str().unwrap_or(""), default_types, locale)?])
+            _ => Ok(vec![self.parse_phone_string(value.as_str().unwrap_or(""), default_types, locale)?])
         }
     }
 

@@ -113,7 +113,7 @@ impl Validator {
 
         // Validate phones
         if let Some(phones) = &ycard.phones {
-            for (_i, phone) in phones.iter().enumerate() {
+            for phone in phones.iter() {
                 if !phone.number.starts_with('+') {
                     diagnostics.push(Diagnostic {
                         level: DiagnosticLevel::Warning,

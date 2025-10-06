@@ -257,8 +257,7 @@ pub fn yc_free(handle: i32) {
 pub fn yc_last_error() -> i32 {
     if let Some(error) = get_last_error() {
         let bytes = error.as_bytes();
-        let ptr = bytes.as_ptr() as i32;
-        ptr
+        bytes.as_ptr() as i32
     } else {
         0
     }
@@ -397,12 +396,14 @@ pub fn format(ycard_value: JsValue, phones_style: JsValue) -> Result<String, JsV
 // Export aliases for compatibility with LSP server
 #[cfg(feature = "wasm")]
 #[wasm_bindgen]
+#[allow(non_snake_case)]
 pub fn setDefaultLocale(locale: &str) -> Result<(), JsValue> {
     set_default_locale(locale)
 }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen]
+#[allow(non_snake_case)]
 pub fn loadAliasPack(content: &str) -> Result<(), JsValue> {
     load_alias_pack(content)
 }
