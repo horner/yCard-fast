@@ -37,11 +37,17 @@ endef
 all: core wasm cli
 	$(call print_success,Build complete! CLI: ./target/$(TARGET_DIR)/ycard)
 
-# Build core Rust library
-core:
-	$(call print_step,Building yCard core library...)
-	cd ycard-core && cargo build $(CARGO_FLAGS)
-	$(call print_success,Core library built)
+# Generate code from schema
+generate:
+	@echo "$(CYAN)🔄 Generating code from schema...$(NC)"
+	node generate-code.js
+	@echo "$(GREEN)✅ Code generation complete$(NC)"
+
+# Build core library
+core: generate
+	@echo "$(CYAN)📦 Building yCard core library...$(NC)"
+	cd ycard-core && cargo build --release
+	@echo "$(GREEN)✅ Core library built$(NC)"
 
 # Build WASM packages
 wasm: core
@@ -132,6 +138,11 @@ clean:
 	rm -rf ycard-ts/dist ycard-ts/node_modules
 	rm -rf ycard-lsp/dist ycard-lsp/node_modules
 	rm -f build-info.json
+	# Clean generated files
+	rm -f ycard-core/src/generated_*.rs
+	rm -f ycard-ts/src/generated_*.ts
+	rm -f ycard-grammar/generated_*.js
+	rm -f ycard-lsp/src/generated_*.ts
 	$(call print_success,Cleaned all build artifacts)
 
 # Show help
@@ -156,6 +167,7 @@ help:
 	@echo "  cli-test  - Test CLI tool"
 	@echo ""
 	@echo "Utilities:"
+	@echo "  generate  - Generate code from schema.json (DRY approach)"
 	@echo "  install   - Install CLI globally"
 	@echo "  clean     - Clean all build artifacts"
 	@echo "  help      - Show this help"

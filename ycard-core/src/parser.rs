@@ -1,4 +1,5 @@
 use crate::schema::*;
+use crate::generated_types::{PhoneType, EmailType, PHONE_SHORTHAND_KEYS};
 use crate::i18n::AliasManager;
 use serde_yaml::Value;
 use thiserror::Error;
@@ -101,7 +102,8 @@ impl Parser {
         ycard: &mut YCard, 
         locale: Option<&str>
     ) -> Result<(), ParseError> {
-        let _shorthand_keys = ["mobile", "cell", "home", "work", "fax", "pager", "main"];
+        // Using generated shorthand keys from schema
+        let _shorthand_keys = PHONE_SHORTHAND_KEYS;
         let mut shorthand_phones = Vec::new();
 
         // Check for localized shorthand keys

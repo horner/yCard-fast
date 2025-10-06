@@ -1,7 +1,9 @@
+pub mod generated_types;
+pub mod generated_diagnostics;
 pub mod schema;
 pub mod parser;
-pub mod formatter;
 pub mod validator;
+pub mod formatter;
 pub mod i18n;
 pub mod wasm;
 

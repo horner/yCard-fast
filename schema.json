@@ -1,0 +1,253 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "description": "yCard Schema Definition - Single Source of Truth",
+    "generator": "This file generates all type definitions, grammar rules, and validation logic"
+  },
+  "enums": {
+    "PhoneType": {
+      "description": "Phone number types with localized aliases",
+      "variants": [
+        {
+          "canonical": "home",
+          "aliases": ["casa", "domicile", "自宅"]
+        },
+        {
+          "canonical": "work", 
+          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+        },
+        {
+          "canonical": "mobile",
+          "aliases": ["cell", "móvil", "portable", "携帯"]
+        },
+        {
+          "canonical": "fax",
+          "aliases": []
+        },
+        {
+          "canonical": "pager",
+          "aliases": []
+        },
+        {
+          "canonical": "main",
+          "aliases": ["principal"]
+        },
+        {
+          "canonical": "other",
+          "aliases": ["otro", "autre", "その他"]
+        }
+      ]
+    },
+    "EmailType": {
+      "description": "Email address types with localized aliases",
+      "variants": [
+        {
+          "canonical": "home",
+          "aliases": ["casa", "domicile", "自宅"]
+        },
+        {
+          "canonical": "work",
+          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+        },
+        {
+          "canonical": "other",
+          "aliases": ["otro", "autre", "その他"]
+        }
+      ]
+    },
+    "AddressType": {
+      "description": "Address types with localized aliases", 
+      "variants": [
+        {
+          "canonical": "home",
+          "aliases": ["casa", "domicile", "自宅"]
+        },
+        {
+          "canonical": "work",
+          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+        },
+        {
+          "canonical": "other",
+          "aliases": ["otro", "autre", "その他"]
+        }
+      ]
+    },
+    "DiagnosticLevel": {
+      "description": "Validation diagnostic severity levels",
+      "variants": [
+        {
+          "canonical": "Error",
+          "aliases": ["error", "err"]
+        },
+        {
+          "canonical": "Warning", 
+          "aliases": ["warning", "warn"]
+        },
+        {
+          "canonical": "Info",
+          "aliases": ["info", "information"]
+        },
+        {
+          "canonical": "Hint",
+          "aliases": ["hint", "suggestion"]
+        }
+      ]
+    },
+    "PhonesStyle": {
+      "description": "Phone formatting styles",
+      "variants": [
+        {
+          "canonical": "canonical",
+          "aliases": ["full", "structured"]
+        },
+        {
+          "canonical": "shorthand",
+          "aliases": ["short", "compact"]
+        },
+        {
+          "canonical": "auto",
+          "aliases": ["automatic", "smart"]
+        }
+      ]
+    },
+    "ValidationMode": {
+      "description": "Validation strictness modes",
+      "variants": [
+        {
+          "canonical": "lenient",
+          "aliases": ["relaxed", "permissive"]
+        },
+        {
+          "canonical": "strict",
+          "aliases": ["rigid", "exact"]
+        }
+      ]
+    }
+  },
+  "shorthandFields": {
+    "description": "Fields that expand to structured forms",
+    "phoneShorthands": [
+      {
+        "key": "mobile",
+        "expandsTo": "phones",
+        "defaultType": "mobile",
+        "aliases": ["cell", "móvil", "portable", "携帯"]
+      },
+      {
+        "key": "home", 
+        "expandsTo": "phones",
+        "defaultType": "home",
+        "aliases": ["casa", "domicile", "自宅"]
+      },
+      {
+        "key": "work",
+        "expandsTo": "phones", 
+        "defaultType": "work",
+        "aliases": ["trabajo", "travail", "bureau", "勤務"]
+      },
+      {
+        "key": "fax",
+        "expandsTo": "phones",
+        "defaultType": "fax",
+        "aliases": []
+      },
+      {
+        "key": "pager",
+        "expandsTo": "phones",
+        "defaultType": "pager", 
+        "aliases": []
+      },
+      {
+        "key": "main",
+        "expandsTo": "phones",
+        "defaultType": "main",
+        "aliases": ["principal"]
+      }
+    ],
+    "emailShorthands": [
+      {
+        "key": "email",
+        "expandsTo": "emails",
+        "defaultType": "other",
+        "aliases": []
+      }
+    ]
+  },
+  "schema": {
+    "description": "Core yCard schema structure",
+    "fields": [
+      {
+        "name": "version",
+        "type": "number",
+        "required": true,
+        "description": "Schema version, always 1 for v1"
+      },
+      {
+        "name": "uid",
+        "type": "string",
+        "required": false,
+        "description": "Optional unique identifier"
+      },
+      {
+        "name": "name",
+        "type": "Name",
+        "required": false,
+        "description": "Contact name information"
+      },
+      {
+        "name": "phones",
+        "type": "Phone[]",
+        "required": false,
+        "description": "Phone numbers"
+      },
+      {
+        "name": "emails", 
+        "type": "Email[]",
+        "required": false,
+        "description": "Email addresses"
+      },
+      {
+        "name": "addresses",
+        "type": "Address[]",
+        "required": false,
+        "description": "Physical addresses"
+      },
+      {
+        "name": "metadata",
+        "type": "Metadata",
+        "required": false,
+        "description": "Processing metadata"
+      }
+    ]
+  },
+  "diagnosticCodes": {
+    "description": "Standard diagnostic codes for validation",
+    "codes": [
+      {
+        "code": "phone-normalized",
+        "level": "Warning",
+        "message": "Phone number normalized to E.164 format"
+      },
+      {
+        "code": "shorthand-expanded", 
+        "level": "Info",
+        "message": "Shorthand field expanded to structured form"
+      },
+      {
+        "code": "phone-format",
+        "level": "Error", 
+        "message": "Phone number should be in E.164 format"
+      },
+      {
+        "code": "email-invalid",
+        "level": "Error",
+        "message": "Invalid email address"
+      },
+      {
+        "code": "empty-contact",
+        "level": "Error",
+        "message": "At least one of name, phones, or emails must be present"
+      }
+    ]
+  }
+}

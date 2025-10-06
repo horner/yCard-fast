@@ -6,6 +6,9 @@ const PREC = {
   number: 5,
 };
 
+// Import generated keys from schema
+const { PHONE_SHORTHAND_KEYS, EMAIL_SHORTHAND_KEYS } = require('./generated_keys');
+
 module.exports = grammar({
   name: 'ycard',
 
@@ -37,26 +40,9 @@ module.exports = grammar({
       optional($._block_value),
     ),
 
-    phone_shorthand_key: $ => choice(
-      'mobile',
-      'cell',
-      'home',
-      'work',
-      'fax',
-      'pager',
-      'main',
-      // Localized variants
-      'portable',  // French
-      'móvil',     // Spanish
-      '携帯',      // Japanese
-      '自宅',      // Japanese home
-      '勤務',      // Japanese work
-    ),
+    phone_shorthand_key: $ => choice(...PHONE_SHORTHAND_KEYS),
 
-    email_shorthand_key: $ => choice(
-      'email',
-      'emails',
-    ),
+    email_shorthand_key: $ => choice(...EMAIL_SHORTHAND_KEYS),
 
     _block_value: $ => choice(
       $.plain_scalar,

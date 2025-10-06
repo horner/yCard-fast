@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::generated_types::{PhoneType, EmailType, AddressType};
 
 /// yCard canonical schema types
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -38,19 +39,7 @@ pub struct Phone {
     pub label: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "lowercase")]
-pub enum PhoneType {
-    Home,
-    Work,
-    Mobile,
-    Fax,
-    Pager,
-    Main,
-    Other,
-    #[serde(untagged)]
-    Custom(String),
-}
+// PhoneType now imported from generated_types
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Email {
@@ -59,15 +48,7 @@ pub struct Email {
     pub preferred: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "lowercase")]
-pub enum EmailType {
-    Home,
-    Work,
-    Other,
-    #[serde(untagged)]
-    Custom(String),
-}
+// EmailType now imported from generated_types
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Address {
@@ -76,15 +57,7 @@ pub struct Address {
     pub components: Option<AddressComponents>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "lowercase")]
-pub enum AddressType {
-    Home,
-    Work,
-    Other,
-    #[serde(untagged)]
-    Custom(String),
-}
+// AddressType now imported from generated_types
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AddressComponents {
@@ -116,28 +89,4 @@ impl Default for YCard {
     }
 }
 
-impl PhoneType {
-    pub fn from_str_with_locale(s: &str, _locale: &str) -> Self {
-        match s.to_lowercase().as_str() {
-            "home" | "casa" | "domicile" | "自宅" => PhoneType::Home,
-            "work" | "trabajo" | "travail" | "bureau" | "勤務" => PhoneType::Work,
-            "mobile" | "cell" | "móvil" | "portable" | "携帯" => PhoneType::Mobile,
-            "fax" => PhoneType::Fax,
-            "pager" => PhoneType::Pager,
-            "main" | "principal" => PhoneType::Main,
-            "other" | "otro" | "autre" | "その他" => PhoneType::Other,
-            _ => PhoneType::Custom(s.to_string()),
-        }
-    }
-}
-
-impl EmailType {
-    pub fn from_str_with_locale(s: &str, _locale: &str) -> Self {
-        match s.to_lowercase().as_str() {
-            "home" | "casa" | "domicile" | "自宅" => EmailType::Home,
-            "work" | "trabajo" | "travail" | "bureau" | "勤務" => EmailType::Work,
-            "other" | "otro" | "autre" | "その他" => EmailType::Other,
-            _ => EmailType::Custom(s.to_string()),
-        }
-    }
-}
+// from_str_with_locale implementations now in generated_types

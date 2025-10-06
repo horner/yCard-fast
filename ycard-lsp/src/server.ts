@@ -28,6 +28,7 @@ import {
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import * as ycard from './ycard-wrapper';
+import { YCARD_COMPLETION_ITEMS } from './generated_completions';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -274,58 +275,8 @@ function convertDiagnosticLevel(level: ycard.DiagnosticLevelType): DiagnosticSev
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
   (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-    // Basic completion items for yCard schema
-    return [
-      {
-        label: 'version',
-        kind: CompletionItemKind.Property,
-        data: 1,
-        detail: 'yCard format version',
-        insertText: 'version: 1'
-      },
-      {
-        label: 'name',
-        kind: CompletionItemKind.Property,
-        data: 2,
-        detail: 'Contact name',
-        insertText: 'name: '
-      },
-      {
-        label: 'phones',
-        kind: CompletionItemKind.Property,
-        data: 3,
-        detail: 'Phone numbers',
-        insertText: 'phones:\n  - number: "+1 555 123 4567"\n    type: [mobile]'
-      },
-      {
-        label: 'emails',
-        kind: CompletionItemKind.Property,
-        data: 4,
-        detail: 'Email addresses',
-        insertText: 'emails:\n  - address: "example@domain.com"\n    type: [home]'
-      },
-      {
-        label: 'mobile',
-        kind: CompletionItemKind.Property,
-        data: 5,
-        detail: 'Mobile phone (shorthand)',
-        insertText: 'mobile: "+1 555 123 4567"'
-      },
-      {
-        label: 'home',
-        kind: CompletionItemKind.Property,
-        data: 6,
-        detail: 'Home phone (shorthand)',
-        insertText: 'home: "+1 555 123 4567"'
-      },
-      {
-        label: 'work',
-        kind: CompletionItemKind.Property,
-        data: 7,
-        detail: 'Work phone (shorthand)',
-        insertText: 'work: "+1 555 123 4567"'
-      }
-    ];
+    // Generated completion items from schema
+    return YCARD_COMPLETION_ITEMS;
   }
 );
 
