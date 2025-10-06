@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Tree-sitter grammar for yCard",
   "main": "bindings/node",
-  "repository": "https://github.com/yabl-lang/ycard-grammar",
+  "repository": "https://github.com/mieweb/ycard-grammar",
   "license": "MIT",
   "keywords": [
     "ycard",
@@ -14,7 +14,7 @@
   "tree-sitter": [
     {
       "scope": "source.ycard",
-      "file-types": ["ycard", "yml", "yaml"],
+      "file-types": ["ycard", "yabl"],
       "highlights": "queries/highlights.scm",
       "folds": "queries/folds.scm",
       "indents": "queries/indents.scm",
