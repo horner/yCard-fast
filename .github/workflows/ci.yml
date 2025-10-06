@@ -134,12 +134,7 @@ jobs:
       run: make ci
     
     - name: Run conformance tests
-      run: |
-        for test_case in tests/cases/*/; do
-          echo "Testing $test_case"
-          ./bin/ycard parse "$test_case/input.ycard" --json-ast > /tmp/output.json
-          ./bin/ycard check "$test_case/input.ycard" --strict || true
-        done
+      run: make cli-test
 
   release:
     name: Release
@@ -161,14 +156,8 @@ jobs:
         node-version: '20'
         registry-url: 'https://registry.npmjs.org'
     
-    - name: Generate code from schema
-      run: node generate-code.js
-    
-    - name: Install wasm-pack
-      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-    
     - name: Build release artifacts
-      run: make ci
+      run: make full
     
     - name: Create release
       uses: softprops/action-gh-release@v1
