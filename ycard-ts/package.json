@@ -2,6 +2,7 @@
   "name": "@ycard/core",
   "version": "0.1.0",
   "description": "TypeScript SDK for yCard with WASM support",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

@@ -1,17 +1,17 @@
-pub mod generated_types;
-pub mod generated_diagnostics;
-pub mod schema;
-pub mod parser;
-pub mod validator;
 pub mod formatter;
+pub mod generated_diagnostics;
+pub mod generated_types;
 pub mod i18n;
+pub mod parser;
+pub mod schema;
+pub mod validator;
 pub mod wasm;
 
-pub use schema::*;
-pub use parser::{Parser, ParseError};
 pub use formatter::{Formatter, PhonesStyle};
-pub use validator::{Validator, ValidationMode, Diagnostic, DiagnosticLevel};
 pub use i18n::{AliasManager, AliasPack, LocaleData};
+pub use parser::{ParseError, Parser};
+pub use schema::*;
+pub use validator::{Diagnostic, DiagnosticLevel, ValidationMode, Validator};
 
 // Re-export main functionality
 pub fn parse(input: &str, locale: Option<&str>) -> Result<YCard, ParseError> {
@@ -29,7 +29,10 @@ pub fn format(ycard: &YCard) -> Result<String, serde_yaml::Error> {
     formatter.format(ycard)
 }
 
-pub fn validate(ycard: &YCard, mode: ValidationMode) -> Result<Vec<Diagnostic>, validator::ValidationError> {
+pub fn validate(
+    ycard: &YCard,
+    mode: ValidationMode,
+) -> Result<Vec<Diagnostic>, validator::ValidationError> {
     let validator = Validator::new(mode);
     validator.validate(ycard)
 }
@@ -65,7 +68,7 @@ email: "jane@example.com"
 
     #[test]
     fn test_localized_input() {
-        // TODO: This test should work with dotted path aliases like nom->name.familyName  
+        // TODO: This test should work with dotted path aliases like nom->name.familyName
         // Currently using simple aliases that work: phone->phones, email->emails
         let input = r#"
 phone: "06 12 34 56 78"

@@ -14,6 +14,13 @@ const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
 
 console.log('🔄 Generating code from schema.json...');
 
+// Helper function to safely write files
+function safeWriteFile(filePath, content) {
+  const fullPath = path.join(__dirname, filePath);
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+  fs.writeFileSync(fullPath, content);
+}
+
 // Generate Rust enums and types
 function generateRustTypes() {
   console.log('  📝 Generating Rust types...');
@@ -72,17 +79,25 @@ use serde::{Deserialize, Serialize};
   }
   rustCode += `];\n\n`;
 
-  rustCode += `pub const EMAIL_SHORTHAND_KEYS: &[&str] = &[\n`;
+  // Generate EMAIL_SHORTHAND_KEYS - use single line for short arrays
+  const emailShorthandKeys = [];
   for (const shorthand of schema.shorthandFields.emailShorthands) {
     const allKeys = [shorthand.key, ...shorthand.aliases];
-    for (const key of allKeys) {
+    emailShorthandKeys.push(...allKeys);
+  }
+  
+  if (emailShorthandKeys.length <= 3) {
+    rustCode += `pub const EMAIL_SHORTHAND_KEYS: &[&str] = &[${emailShorthandKeys.map(k => `"${k}"`).join(', ')}];\n`;
+  } else {
+    rustCode += `pub const EMAIL_SHORTHAND_KEYS: &[&str] = &[\n`;
+    for (const key of emailShorthandKeys) {
       rustCode += `    "${key}",\n`;
     }
+    rustCode += `];\n`;
   }
-  rustCode += `];\n\n`;
 
   // Write to file
-  fs.writeFileSync(path.join(__dirname, 'ycard-core/src/generated_types.rs'), rustCode);
+  safeWriteFile('ycard-core/src/generated_types.rs', rustCode);
   console.log('    ✅ ycard-core/src/generated_types.rs');
 }
 
@@ -144,7 +159,7 @@ function generateTypeScriptTypes() {
   tsCode += `] as const;\n\n`;
 
   // Write to file
-  fs.writeFileSync(path.join(__dirname, 'ycard-ts/src/generated_types.ts'), tsCode);
+  safeWriteFile('ycard-ts/src/generated_types.ts', tsCode);
   console.log('    ✅ ycard-ts/src/generated_types.ts');
 }
 
@@ -194,7 +209,7 @@ module.exports = {
 `;
 
   // Write to file
-  fs.writeFileSync(path.join(__dirname, 'ycard-grammar/generated_keys.js'), grammarCode);
+  safeWriteFile('ycard-grammar/generated_keys.js', grammarCode);
   console.log('    ✅ ycard-grammar/generated_keys.js');
 }
 
@@ -256,7 +271,7 @@ export const YCARD_COMPLETION_ITEMS: CompletionItem[] = [
 `;
 
   // Write to file
-  fs.writeFileSync(path.join(__dirname, 'ycard-lsp/src/generated_completions.ts'), completionCode);
+  safeWriteFile('ycard-lsp/src/generated_completions.ts', completionCode);
   console.log('    ✅ ycard-lsp/src/generated_completions.ts');
 }
 
@@ -294,7 +309,7 @@ pub const DIAGNOSTIC_CODES: &[DiagnosticCode] = &[
   rustCode += `];
 `;
 
-  fs.writeFileSync(path.join(__dirname, 'ycard-core/src/generated_diagnostics.rs'), rustCode);
+  safeWriteFile('ycard-core/src/generated_diagnostics.rs', rustCode);
   console.log('    ✅ ycard-core/src/generated_diagnostics.rs');
 }
 
@@ -329,7 +344,7 @@ function generateI18nAliases() {
   });
   
   const aliasesJson = JSON.stringify(aliasPack, null, 2);
-  fs.writeFileSync(path.join(__dirname, 'ycard-core/data/aliases.fallback.json'), aliasesJson);
+  safeWriteFile('ycard-core/data/aliases.fallback.json', aliasesJson);
   console.log('    ✅ ycard-core/data/aliases.fallback.json');
 }
 

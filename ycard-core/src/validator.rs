@@ -89,7 +89,11 @@ impl Validator {
         Ok(diagnostics)
     }
 
-    fn validate_lenient(&self, ycard: &YCard, diagnostics: &mut Vec<Diagnostic>) -> Result<(), ValidationError> {
+    fn validate_lenient(
+        &self,
+        ycard: &YCard,
+        diagnostics: &mut Vec<Diagnostic>,
+    ) -> Result<(), ValidationError> {
         // Check basic structure
         if ycard.version == 0 {
             diagnostics.push(Diagnostic {
@@ -102,8 +106,14 @@ impl Validator {
                     kind: "quickfix".to_string(),
                     edit: TextEdit {
                         range: Range {
-                            start: Position { line: 0, character: 0 },
-                            end: Position { line: 0, character: 0 },
+                            start: Position {
+                                line: 0,
+                                character: 0,
+                            },
+                            end: Position {
+                                line: 0,
+                                character: 0,
+                            },
                         },
                         new_text: "version: 1\n".to_string(),
                     },
@@ -117,7 +127,10 @@ impl Validator {
                 if !phone.number.starts_with('+') {
                     diagnostics.push(Diagnostic {
                         level: DiagnosticLevel::Warning,
-                        message: format!("Phone number should be in E.164 format: {}", phone.number),
+                        message: format!(
+                            "Phone number should be in E.164 format: {}",
+                            phone.number
+                        ),
                         code: Some("phone-format".to_string()),
                         range: None,
                         fixes: vec![],
@@ -144,7 +157,11 @@ impl Validator {
         Ok(())
     }
 
-    fn validate_strict(&self, ycard: &YCard, diagnostics: &mut Vec<Diagnostic>) -> Result<(), ValidationError> {
+    fn validate_strict(
+        &self,
+        ycard: &YCard,
+        diagnostics: &mut Vec<Diagnostic>,
+    ) -> Result<(), ValidationError> {
         // All lenient validations become errors in strict mode
         self.validate_lenient(ycard, diagnostics)?;
 
@@ -169,7 +186,11 @@ impl Validator {
         Ok(())
     }
 
-    fn validate_schema_only(&self, ycard: &YCard, diagnostics: &mut Vec<Diagnostic>) -> Result<(), ValidationError> {
+    fn validate_schema_only(
+        &self,
+        ycard: &YCard,
+        diagnostics: &mut Vec<Diagnostic>,
+    ) -> Result<(), ValidationError> {
         // Only validate against the canonical schema structure
         if ycard.version > 1 {
             diagnostics.push(Diagnostic {
@@ -198,9 +219,9 @@ mod tests {
 
     #[test]
     fn test_lenient_validation() {
-        use crate::schema::Phone;
         use crate::generated_types::PhoneType;
-        
+        use crate::schema::Phone;
+
         let validator = Validator::new(ValidationMode::Lenient);
         // Create a YCard with bad phone format to trigger lenient validation warning
         let ycard = YCard {
@@ -219,7 +240,7 @@ mod tests {
             manager: None,
             metadata: None,
         };
-        
+
         let diagnostics = validator.validate(&ycard).unwrap();
         // Should generate warning about bad phone format
         assert!(!diagnostics.is_empty());
@@ -230,10 +251,12 @@ mod tests {
     fn test_strict_validation() {
         let validator = Validator::new(ValidationMode::Strict);
         let ycard = YCard::default();
-        
+
         let diagnostics = validator.validate(&ycard).unwrap();
         assert!(!diagnostics.is_empty());
         // Should have error for empty contact
-        assert!(diagnostics.iter().any(|d| matches!(d.level, DiagnosticLevel::Error)));
+        assert!(diagnostics
+            .iter()
+            .any(|d| matches!(d.level, DiagnosticLevel::Error)));
     }
 }

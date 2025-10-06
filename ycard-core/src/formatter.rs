@@ -37,7 +37,7 @@ impl Formatter {
     pub fn format(&self, ycard: &YCard) -> Result<String, serde_yaml::Error> {
         // Convert to YAML with custom serialization
         let yaml_str = serde_yaml::to_string(ycard)?;
-        
+
         // Post-process for formatting preferences
         Ok(self.post_process_yaml(yaml_str))
     }
@@ -102,7 +102,7 @@ mod tests {
     fn test_basic_formatting() {
         let formatter = Formatter::new();
         let ycard = YCard::default();
-        
+
         let result = formatter.format(&ycard);
         assert!(result.is_ok());
     }

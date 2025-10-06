@@ -1,5 +1,5 @@
+use crate::generated_types::{AddressType, EmailType, PhoneType};
 use serde::{Deserialize, Serialize};
-use crate::generated_types::{PhoneType, EmailType, AddressType};
 
 /// yCard canonical schema types
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

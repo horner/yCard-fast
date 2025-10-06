@@ -1,6 +1,6 @@
+use anyhow;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use anyhow;
 
 /// Internationalization alias data structure
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -32,7 +32,7 @@ impl AliasManager {
             packs: Vec::new(),
             default_locale: "en".to_string(),
         };
-        
+
         // Load baked-in fallback
         manager.load_fallback_pack();
         manager
@@ -91,7 +91,9 @@ impl AliasManager {
         for pack in self.packs.iter().rev() {
             for loc in &locales {
                 if let Some(locale_data) = pack.locales.get(loc) {
-                    if let Some(alias) = locale_data.type_aliases.get(&self.normalize_key(type_name)) {
+                    if let Some(alias) =
+                        locale_data.type_aliases.get(&self.normalize_key(type_name))
+                    {
                         return Some(alias.clone());
                     }
                 }
@@ -103,24 +105,24 @@ impl AliasManager {
     /// Build BCP-47 fallback chain: fr-CA -> fr -> root
     fn build_locale_chain(&self, locale: &str) -> Vec<String> {
         let mut chain = vec![locale.to_string()];
-        
+
         if let Some(lang) = locale.split('-').next() {
             if lang != locale {
                 chain.push(lang.to_string());
             }
         }
-        
+
         if locale != "root" {
             chain.push("root".to_string());
         }
-        
+
         chain
     }
 
     /// Normalize key for case/diacritic insensitive matching
     fn normalize_key(&self, key: &str) -> String {
         use unicode_normalization::UnicodeNormalization;
-        
+
         // Simple normalization: decompose and remove common diacritics
         key.nfd()
             .filter(|c| {

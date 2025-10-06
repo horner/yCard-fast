@@ -1,5 +1,5 @@
-use crate::schema::YCard;
 use crate::i18n::AliasManager;
+use crate::schema::YCard;
 use serde_json;
 use std::collections::HashMap;
 use std::sync::{Mutex, OnceLock};
@@ -72,7 +72,7 @@ pub fn yc_parse(ptr: i32, len: i32) -> i32 {
                 set_last_error("Failed to acquire handle lock");
                 return -1;
             };
-            
+
             if let Ok(mut arena) = get_document_arena().lock() {
                 arena.insert(handle, ycard);
                 handle
@@ -92,7 +92,8 @@ pub fn yc_parse(ptr: i32, len: i32) -> i32 {
 #[wasm_bindgen]
 pub fn yc_normalize(handle: i32, _flags: u32, locale_ptr: i32, locale_len: i32) -> i32 {
     let _locale = if locale_ptr != 0 && locale_len > 0 {
-        let slice = unsafe { std::slice::from_raw_parts(locale_ptr as *const u8, locale_len as usize) };
+        let slice =
+            unsafe { std::slice::from_raw_parts(locale_ptr as *const u8, locale_len as usize) };
         std::str::from_utf8(slice).ok()
     } else {
         None
@@ -156,20 +157,18 @@ pub fn yc_validate(handle: i32, mode: u32) -> i32 {
         if let Some(ycard) = arena.get(&handle) {
             let validator = crate::validator::Validator::new(validation_mode);
             match validator.validate(ycard) {
-                Ok(diagnostics) => {
-                    match serde_json::to_string(&diagnostics) {
-                        Ok(json) => {
-                            let bytes = json.into_bytes();
-                            let ptr = bytes.as_ptr() as i32;
-                            std::mem::forget(bytes);
-                            ptr
-                        }
-                        Err(e) => {
-                            set_last_error(&format!("JSON serialization error: {}", e));
-                            -1
-                        }
+                Ok(diagnostics) => match serde_json::to_string(&diagnostics) {
+                    Ok(json) => {
+                        let bytes = json.into_bytes();
+                        let ptr = bytes.as_ptr() as i32;
+                        std::mem::forget(bytes);
+                        ptr
                     }
-                }
+                    Err(e) => {
+                        set_last_error(&format!("JSON serialization error: {}", e));
+                        -1
+                    }
+                },
                 Err(e) => {
                     set_last_error(&format!("Validation error: {}", e));
                     -1
@@ -268,12 +267,12 @@ pub fn yc_last_error() -> i32 {
 #[wasm_bindgen]
 pub fn parse_ycard_lenient(input: &str, locale: Option<String>) -> Result<JsValue, JsValue> {
     use crate::parser::Parser;
-    
+
     let parser = Parser::new();
     let locale_ref = locale.as_deref();
     match parser.parse_lenient(input, locale_ref) {
         Ok(ycard) => Ok(serde_wasm_bindgen::to_value(&ycard)?),
-        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e)))
+        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e))),
     }
 }
 
@@ -281,11 +280,11 @@ pub fn parse_ycard_lenient(input: &str, locale: Option<String>) -> Result<JsValu
 #[wasm_bindgen]
 pub fn parse_ycard_strict(input: &str) -> Result<JsValue, JsValue> {
     use crate::parser::Parser;
-    
+
     let parser = Parser::new();
     match parser.parse_strict(input) {
         Ok(ycard) => Ok(serde_wasm_bindgen::to_value(&ycard)?),
-        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e)))
+        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e))),
     }
 }
 
@@ -306,7 +305,10 @@ pub fn load_alias_pack(content: &str) -> Result<(), JsValue> {
     if let Ok(mut manager) = get_alias_manager().lock() {
         match manager.load_pack_bytes(content.as_bytes()) {
             Ok(()) => Ok(()),
-            Err(e) => Err(JsValue::from_str(&format!("Failed to load alias pack: {}", e)))
+            Err(e) => Err(JsValue::from_str(&format!(
+                "Failed to load alias pack: {}",
+                e
+            ))),
         }
     } else {
         Err(JsValue::from_str("Failed to acquire alias manager lock"))
@@ -316,21 +318,21 @@ pub fn load_alias_pack(content: &str) -> Result<(), JsValue> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen]
 pub fn validate_ycard(ycard_json: &str, mode: &str) -> Result<JsValue, JsValue> {
-    use crate::validator::{Validator, ValidationMode};
-    
+    use crate::validator::{ValidationMode, Validator};
+
     let validation_mode = match mode {
         "strict" => ValidationMode::Strict,
         "lenient" => ValidationMode::Lenient,
-        _ => return Err(JsValue::from_str("Invalid validation mode"))
+        _ => return Err(JsValue::from_str("Invalid validation mode")),
     };
-    
+
     let ycard: YCard = serde_json::from_str(ycard_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid yCard JSON: {}", e)))?;
-    
+
     let validator = Validator::new(validation_mode);
     match validator.validate(&ycard) {
         Ok(diagnostics) => Ok(serde_wasm_bindgen::to_value(&diagnostics)?),
-        Err(e) => Err(JsValue::from_str(&format!("Validation error: {}", e)))
+        Err(e) => Err(JsValue::from_str(&format!("Validation error: {}", e))),
     }
 }
 
@@ -338,19 +340,20 @@ pub fn validate_ycard(ycard_json: &str, mode: &str) -> Result<JsValue, JsValue> 
 #[wasm_bindgen]
 pub fn format_ycard(ycard_json: &str, phones_style: &str) -> Result<String, JsValue> {
     use crate::formatter::{Formatter, PhonesStyle};
-    
+
     let phones_style = match phones_style {
         "canonical" => PhonesStyle::Canonical,
         "shorthand" => PhonesStyle::Shorthand,
         "auto" => PhonesStyle::Auto,
-        _ => return Err(JsValue::from_str("Invalid phones style"))
+        _ => return Err(JsValue::from_str("Invalid phones style")),
     };
-    
+
     let ycard: YCard = serde_json::from_str(ycard_json)
         .map_err(|e| JsValue::from_str(&format!("Invalid yCard JSON: {}", e)))?;
-    
+
     let formatter = Formatter::new().with_phones_style(phones_style);
-    formatter.format(&ycard)
+    formatter
+        .format(&ycard)
         .map_err(|e| JsValue::from_str(&format!("Format error: {}", e)))
 }
 
@@ -367,9 +370,10 @@ pub fn validate(ycard_value: JsValue, _mode: JsValue) -> Result<JsValue, JsValue
     // Convert JsValue back to JSON string for validation
     let ycard_json = js_sys::JSON::stringify(&ycard_value)
         .map_err(|_| JsValue::from_str("Failed to stringify yCard"))?;
-    let ycard_json_str = ycard_json.as_string()
+    let ycard_json_str = ycard_json
+        .as_string()
         .ok_or_else(|| JsValue::from_str("Invalid JSON string"))?;
-    
+
     // Use lenient validation by default
     validate_ycard(&ycard_json_str, "lenient")
 }
@@ -380,16 +384,19 @@ pub fn format(ycard_value: JsValue, phones_style: JsValue) -> Result<String, JsV
     // Convert JsValue back to JSON string for formatting
     let ycard_json = js_sys::JSON::stringify(&ycard_value)
         .map_err(|_| JsValue::from_str("Failed to stringify yCard"))?;
-    let ycard_json_str = ycard_json.as_string()
+    let ycard_json_str = ycard_json
+        .as_string()
         .ok_or_else(|| JsValue::from_str("Invalid JSON string"))?;
-    
+
     // Extract phones style - default to canonical
     let style = if phones_style.is_string() {
-        phones_style.as_string().unwrap_or_else(|| "canonical".to_string())
+        phones_style
+            .as_string()
+            .unwrap_or_else(|| "canonical".to_string())
     } else {
         "canonical".to_string()
     };
-    
+
     format_ycard(&ycard_json_str, &style)
 }
 
@@ -513,7 +520,7 @@ pub mod c_api {
         } else {
             if !out_err.is_null() {
                 unsafe {
-                    (*out_err).code = -1;    
+                    (*out_err).code = -1;
                     let msg = CString::new("Failed to acquire alias manager lock").unwrap();
                     (*out_err).message = msg.into_raw();
                 }

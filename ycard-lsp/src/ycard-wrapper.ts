@@ -1,5 +1,5 @@
 // TypeScript wrapper to bridge yCard WASM exports to LSP server API expectations
-import * as wasm from '../../ycard-core/pkg/ycard_core.js';
+import * as wasm from '../../ycard-ts/wasm/ycard_core.js';
 
 // Export the main parsing functions with expected API
 export function parse(input: string, locale?: string): Promise<any> {

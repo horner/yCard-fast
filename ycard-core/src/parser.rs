@@ -1,6 +1,6 @@
-use crate::schema::*;
-use crate::generated_types::{PhoneType, EmailType, PHONE_SHORTHAND_KEYS};
+use crate::generated_types::{EmailType, PhoneType, PHONE_SHORTHAND_KEYS};
 use crate::i18n::AliasManager;
+use crate::schema::*;
 use serde_yaml::Value;
 use thiserror::Error;
 
@@ -35,7 +35,7 @@ impl Parser {
     pub fn parse_lenient(&self, input: &str, locale: Option<&str>) -> Result<YCard, ParseError> {
         // First parse as generic YAML
         let value: Value = serde_yaml::from_str(input)?;
-        
+
         // Convert to our schema with normalization
         self.value_to_ycard(value, locale)
     }
@@ -52,12 +52,12 @@ impl Parser {
         if let Value::Mapping(ref mut map) = value {
             // Process shorthand phone fields first
             self.extract_shorthand_phones(map, &mut ycard, locale)?;
-            
+
             // Process regular fields
             for (key, val) in map.iter() {
                 if let Value::String(key_str) = key {
                     let normalized_key = self.normalize_field_key(key_str, locale);
-                    
+
                     match normalized_key.as_str() {
                         "version" => {
                             if let Some(v) = val.as_u64() {
@@ -107,17 +107,18 @@ impl Parser {
     }
 
     fn extract_shorthand_phones(
-        &self, 
-        map: &mut serde_yaml::Mapping, 
-        ycard: &mut YCard, 
-        locale: Option<&str>
+        &self,
+        map: &mut serde_yaml::Mapping,
+        ycard: &mut YCard,
+        locale: Option<&str>,
     ) -> Result<(), ParseError> {
         // Using generated shorthand keys from schema
         let _shorthand_keys = PHONE_SHORTHAND_KEYS;
         let mut shorthand_phones = Vec::new();
 
         // Check for localized shorthand keys
-        let keys_to_remove: Vec<_> = map.keys()
+        let keys_to_remove: Vec<_> = map
+            .keys()
             .filter_map(|k| {
                 if let Value::String(key_str) = k {
                     let normalized = self.normalize_field_key(key_str, locale);
@@ -137,7 +138,8 @@ impl Parser {
                 if let Value::String(key_str) = &key {
                     let normalized = self.normalize_field_key(key_str, locale);
                     if let Some(type_part) = normalized.strip_prefix("phones.type:") {
-                        let phone_type = PhoneType::from_str_with_locale(type_part, locale.unwrap_or("en"));
+                        let phone_type =
+                            PhoneType::from_str_with_locale(type_part, locale.unwrap_or("en"));
                         let phones = self.value_to_phones(value, vec![phone_type], locale)?;
                         shorthand_phones.extend(phones);
                     }
@@ -202,18 +204,30 @@ impl Parser {
         }
     }
 
-    fn extract_phones(&self, value: &Value, locale: Option<&str>) -> Result<Vec<Phone>, ParseError> {
+    fn extract_phones(
+        &self,
+        value: &Value,
+        locale: Option<&str>,
+    ) -> Result<Vec<Phone>, ParseError> {
         match value {
             Value::String(s) => {
                 // Single phone number
-                Ok(vec![self.parse_phone_string(s, vec![PhoneType::Other], locale)?])
+                Ok(vec![self.parse_phone_string(
+                    s,
+                    vec![PhoneType::Other],
+                    locale,
+                )?])
             }
             Value::Sequence(seq) => {
                 let mut phones = Vec::new();
                 for item in seq {
                     match item {
                         Value::String(s) => {
-                            phones.push(self.parse_phone_string(s, vec![PhoneType::Other], locale)?);
+                            phones.push(self.parse_phone_string(
+                                s,
+                                vec![PhoneType::Other],
+                                locale,
+                            )?);
                         }
                         Value::Mapping(_) => {
                             // Parse as phone object
@@ -232,17 +246,24 @@ impl Parser {
         }
     }
 
-    fn value_to_phones(&self, value: Value, default_types: Vec<PhoneType>, locale: Option<&str>) -> Result<Vec<Phone>, ParseError> {
+    fn value_to_phones(
+        &self,
+        value: Value,
+        default_types: Vec<PhoneType>,
+        locale: Option<&str>,
+    ) -> Result<Vec<Phone>, ParseError> {
         match value {
-            Value::String(s) => {
-                Ok(vec![self.parse_phone_string(&s, default_types, locale)?])
-            }
+            Value::String(s) => Ok(vec![self.parse_phone_string(&s, default_types, locale)?]),
             Value::Sequence(seq) => {
                 let mut phones = Vec::new();
                 for item in seq {
                     match item {
                         Value::String(s) => {
-                            phones.push(self.parse_phone_string(&s, default_types.clone(), locale)?);
+                            phones.push(self.parse_phone_string(
+                                &s,
+                                default_types.clone(),
+                                locale,
+                            )?);
                         }
                         Value::Mapping(_) => {
                             phones.push(self.parse_phone_object(&item, locale)?);
@@ -252,15 +273,27 @@ impl Parser {
                 }
                 Ok(phones)
             }
-            _ => Ok(vec![self.parse_phone_string(value.as_str().unwrap_or(""), default_types, locale)?])
+            _ => Ok(vec![self.parse_phone_string(
+                value.as_str().unwrap_or(""),
+                default_types,
+                locale,
+            )?]),
         }
     }
 
-    fn parse_phone_string(&self, s: &str, default_types: Vec<PhoneType>, _locale: Option<&str>) -> Result<Phone, ParseError> {
+    fn parse_phone_string(
+        &self,
+        s: &str,
+        default_types: Vec<PhoneType>,
+        _locale: Option<&str>,
+    ) -> Result<Phone, ParseError> {
         // Simple phone parsing - in real implementation would use libphonenumber
         let (number, ext) = if let Some(ext_pos) = s.find("ext") {
             let (num_part, ext_part) = s.split_at(ext_pos);
-            let ext = ext_part.trim_start_matches("ext").trim_start_matches('.').trim();
+            let ext = ext_part
+                .trim_start_matches("ext")
+                .trim_start_matches('.')
+                .trim();
             (num_part.trim(), Some(ext.to_string()))
         } else {
             (s.trim(), None)
@@ -319,45 +352,57 @@ impl Parser {
         }
     }
 
-    fn parse_phone_types(&self, value: &Value, locale: Option<&str>) -> Result<Vec<PhoneType>, ParseError> {
+    fn parse_phone_types(
+        &self,
+        value: &Value,
+        locale: Option<&str>,
+    ) -> Result<Vec<PhoneType>, ParseError> {
         match value {
-            Value::String(s) => {
-                Ok(vec![PhoneType::from_str_with_locale(s, locale.unwrap_or("en"))])
-            }
-            Value::Sequence(seq) => {
-                Ok(seq.iter()
-                    .filter_map(|v| v.as_str())
-                    .map(|s| PhoneType::from_str_with_locale(s, locale.unwrap_or("en")))
-                    .collect())
-            }
-            _ => Ok(vec![PhoneType::Other])
+            Value::String(s) => Ok(vec![PhoneType::from_str_with_locale(
+                s,
+                locale.unwrap_or("en"),
+            )]),
+            Value::Sequence(seq) => Ok(seq
+                .iter()
+                .filter_map(|v| v.as_str())
+                .map(|s| PhoneType::from_str_with_locale(s, locale.unwrap_or("en")))
+                .collect()),
+            _ => Ok(vec![PhoneType::Other]),
         }
     }
 
     fn normalize_phone_number(&self, number: &str) -> Result<String, ParseError> {
         // Simplified phone normalization - real implementation would use phonenumber crate
-        let digits_only: String = number.chars().filter(|c| c.is_numeric() || *c == '+').collect();
-        
+        let digits_only: String = number
+            .chars()
+            .filter(|c| c.is_numeric() || *c == '+')
+            .collect();
+
         if digits_only.starts_with('+') {
             Ok(digits_only)
         } else if digits_only.len() >= 10 {
             // Assume US number if no country code
             Ok(format!("+1{}", digits_only))
         } else {
-            Err(ParseError::Phone(format!("Invalid phone number: {}", number)))
+            Err(ParseError::Phone(format!(
+                "Invalid phone number: {}",
+                number
+            )))
         }
     }
 
-    fn extract_emails(&self, value: &Value, locale: Option<&str>) -> Result<Vec<Email>, ParseError> {
+    fn extract_emails(
+        &self,
+        value: &Value,
+        locale: Option<&str>,
+    ) -> Result<Vec<Email>, ParseError> {
         // Similar to phones but simpler
         match value {
-            Value::String(s) => {
-                Ok(vec![Email {
-                    address: s.clone(),
-                    r#type: vec![EmailType::Other],
-                    preferred: None,
-                }])
-            }
+            Value::String(s) => Ok(vec![Email {
+                address: s.clone(),
+                r#type: vec![EmailType::Other],
+                preferred: None,
+            }]),
             Value::Sequence(seq) => {
                 let mut emails = Vec::new();
                 for item in seq {
@@ -377,7 +422,7 @@ impl Parser {
                 }
                 Ok(emails)
             }
-            _ => Ok(vec![])
+            _ => Ok(vec![]),
         }
     }
 
@@ -412,22 +457,30 @@ impl Parser {
         }
     }
 
-    fn parse_email_types(&self, value: &Value, locale: Option<&str>) -> Result<Vec<EmailType>, ParseError> {
+    fn parse_email_types(
+        &self,
+        value: &Value,
+        locale: Option<&str>,
+    ) -> Result<Vec<EmailType>, ParseError> {
         match value {
-            Value::String(s) => {
-                Ok(vec![EmailType::from_str_with_locale(s, locale.unwrap_or("en"))])
-            }
-            Value::Sequence(seq) => {
-                Ok(seq.iter()
-                    .filter_map(|v| v.as_str())
-                    .map(|s| EmailType::from_str_with_locale(s, locale.unwrap_or("en")))
-                    .collect())
-            }
-            _ => Ok(vec![EmailType::Other])
+            Value::String(s) => Ok(vec![EmailType::from_str_with_locale(
+                s,
+                locale.unwrap_or("en"),
+            )]),
+            Value::Sequence(seq) => Ok(seq
+                .iter()
+                .filter_map(|v| v.as_str())
+                .map(|s| EmailType::from_str_with_locale(s, locale.unwrap_or("en")))
+                .collect()),
+            _ => Ok(vec![EmailType::Other]),
         }
     }
 
-    fn extract_addresses(&self, _value: &Value, _locale: Option<&str>) -> Result<Vec<Address>, ParseError> {
+    fn extract_addresses(
+        &self,
+        _value: &Value,
+        _locale: Option<&str>,
+    ) -> Result<Vec<Address>, ParseError> {
         // Simplified address parsing
         Ok(vec![])
     }
@@ -462,13 +515,12 @@ impl Parser {
     fn value_to_string_vec(&self, value: &Value) -> Vec<String> {
         match value {
             Value::String(s) => vec![s.clone()],
-            Value::Sequence(seq) => {
-                seq.iter()
-                    .filter_map(|v| v.as_str())
-                    .map(|s| s.to_string())
-                    .collect()
-            }
-            _ => vec![]
+            Value::Sequence(seq) => seq
+                .iter()
+                .filter_map(|v| v.as_str())
+                .map(|s| s.to_string())
+                .collect(),
+            _ => vec![],
         }
     }
 }
@@ -491,7 +543,7 @@ version: 1
 name: "John Doe"
 mobile: "+1 555 123 4567"
 "#;
-        
+
         let result = parser.parse_lenient(input, Some("en")).unwrap();
         assert_eq!(result.version, 1);
         assert!(result.name.is_some());
@@ -507,7 +559,7 @@ mobile: "+1 555 123 4567"
 phone: "06 12 34 56 78"
 email: "test@example.com"
 "#;
-        
+
         let result = parser.parse_lenient(input, Some("fr")).unwrap();
         assert!(result.phones.is_some());
         assert!(result.emails.is_some());
