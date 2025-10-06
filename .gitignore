@@ -228,6 +228,17 @@ tramp
 /test-results/
 /coverage/
 
+# Generated files (DO NOT COMMIT)
+# These files are automatically generated from schema.json
+# Run `node generate-code.js` or `make generate` to recreate them
+
+# Schema-generated code files
+ycard-core/src/generated_*.rs
+ycard-ts/src/generated_*.ts
+ycard-grammar/generated_*.js
+ycard-lsp/src/generated_*.ts
+ycard-core/data/aliases.fallback.json
+
 # Tree-sitter generated files
 **/src/parser.c
 **/src/tree_sitter/

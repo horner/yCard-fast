@@ -249,5 +249,140 @@
         "message": "At least one of name, phones, or emails must be present"
       }
     ]
+  },
+  "i18n": {
+    "description": "Internationalization alias mappings for localized field names",
+    "locales": {
+      "root": {
+        "description": "Base locale with core field mappings",
+        "keyAliases": {
+          "name": "name",
+          "phone": "phones",
+          "phones": "phones",
+          "email": "emails",
+          "emails": "emails",
+          "address": "addresses",
+          "addresses": "addresses",
+          "mobile": "phones.type:mobile",
+          "cell": "phones.type:mobile",
+          "home": "phones.type:home",
+          "work": "phones.type:work",
+          "fax": "phones.type:fax",
+          "pager": "phones.type:pager",
+          "main": "phones.type:main"
+        },
+        "typeAliases": {
+          "home": "home",
+          "work": "work",
+          "mobile": "mobile",
+          "cell": "mobile",
+          "fax": "fax",
+          "pager": "pager",
+          "main": "main",
+          "other": "other"
+        }
+      },
+      "en": {
+        "description": "English language aliases",
+        "keyAliases": {
+          "first": "name.givenName",
+          "last": "name.familyName",
+          "firstname": "name.givenName",
+          "lastname": "name.familyName",
+          "fullname": "name.displayName"
+        },
+        "typeAliases": {}
+      },
+      "fr": {
+        "description": "French language aliases",
+        "keyAliases": {
+          "nom": "name.familyName",
+          "prenom": "name.givenName",
+          "prénom": "name.givenName",
+          "telephone": "phones",
+          "téléphone": "phones",
+          "portable": "phones.type:mobile",
+          "domicile": "phones.type:home",
+          "bureau": "phones.type:work",
+          "adresse": "addresses"
+        },
+        "typeAliases": {
+          "domicile": "home",
+          "bureau": "work",
+          "mobile": "mobile",
+          "portable": "mobile",
+          "fax": "fax"
+        },
+        "countries": {
+          "allemagne": "DE",
+          "états-unis": "US",
+          "etats-unis": "US",
+          "espagne": "ES",
+          "italie": "IT",
+          "royaume-uni": "GB"
+        },
+        "honorifics": ["M.", "Mme", "Dr", "Pr", "Me"]
+      },
+      "es": {
+        "description": "Spanish language aliases", 
+        "keyAliases": {
+          "nombre": "name.givenName",
+          "apellido": "name.familyName",
+          "apellidos": "name.familyName",
+          "telefono": "phones",
+          "teléfono": "phones",
+          "movil": "phones.type:mobile",
+          "móvil": "phones.type:mobile",
+          "casa": "phones.type:home",
+          "trabajo": "phones.type:work",
+          "direccion": "addresses",
+          "dirección": "addresses"
+        },
+        "typeAliases": {
+          "casa": "home",
+          "trabajo": "work",
+          "movil": "mobile",
+          "móvil": "mobile",
+          "fax": "fax"
+        },
+        "countries": {
+          "alemania": "DE",
+          "estados unidos": "US",
+          "reino unido": "GB",
+          "francia": "FR",
+          "italia": "IT"
+        },
+        "honorifics": ["Sr.", "Sra.", "Dr.", "Dra."]
+      },
+      "ja": {
+        "description": "Japanese language aliases",
+        "keyAliases": {
+          "名前": "name.displayName",
+          "姓": "name.familyName",
+          "名": "name.givenName",
+          "電話": "phones",
+          "携帯": "phones.type:mobile",
+          "自宅": "phones.type:home",
+          "勤務": "phones.type:work",
+          "会社": "phones.type:work",
+          "住所": "addresses"
+        },
+        "typeAliases": {
+          "自宅": "home",
+          "勤務": "work",
+          "会社": "work",
+          "携帯": "mobile",
+          "ファックス": "fax"
+        },
+        "countries": {
+          "アメリカ": "US",
+          "イギリス": "GB",
+          "フランス": "FR",
+          "ドイツ": "DE",
+          "中国": "CN"
+        },
+        "honorifics": ["さん", "様", "先生", "博士"]
+      }
+    }
   }
 }

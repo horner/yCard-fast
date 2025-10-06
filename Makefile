@@ -98,13 +98,25 @@ wasm-test: wasm
 		echo -e "$(YELLOW)⚠️  Skipping WASM test (Node.js not available)$(NC)"; \
 	fi
 
-# Test CLI (if test file exists)
+# Test CLI with various test files
 cli-test: cli
 	$(call print_step,Testing CLI...)
-	@if [ -f test-example.ycard ]; then \
-		(./target/$(TARGET_DIR)/ycard parse test-example.ycard --json-ast >/dev/null 2>&1 && echo -e "$(GREEN)✅ CLI test passed$(NC)" || echo -e "$(YELLOW)⚠️  CLI test failed$(NC)"); \
+	@failed=0; \
+	for testfile in tests/test_*.ycard; do \
+		if [ -f "$$testfile" ]; then \
+			echo "  Testing $$testfile..."; \
+			if ./target/$(TARGET_DIR)/ycard parse "$$testfile" >/dev/null 2>&1; then \
+				echo -e "    $(GREEN)✓$(NC) $$testfile passed"; \
+			else \
+				echo -e "    $(YELLOW)✗$(NC) $$testfile failed"; \
+				failed=$$((failed + 1)); \
+			fi; \
+		fi; \
+	done; \
+	if [ $$failed -eq 0 ]; then \
+		echo -e "$(GREEN)✅ All CLI tests passed$(NC)"; \
 	else \
-		echo -e "$(YELLOW)⚠️  No test file found$(NC)"; \
+		echo -e "$(YELLOW)⚠️  $$failed CLI test(s) failed$(NC)"; \
 	fi
 
 # Install CLI globally

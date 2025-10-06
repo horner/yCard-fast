@@ -14,14 +14,15 @@ A human-friendly, YAML-like contact format with internationalization support, WA
 
 ### Build Everything
 ```bash
-# Easiest: Interactive menu
-./build.sh
-
-# Or use make directly (Single Source of Truth)
+# Use make (Single Source of Truth)
 make                  # Build everything (default)
 make dev              # Development build (faster)
+make generate         # Generate code from schema.json
 make help             # See all options
 ```
+
+> **Note**: Generated files are automatically created from `schema.json` and are **not committed to git**. 
+> Run `make generate` or any build command to create them locally.
 
 ### Use CLI
 ```bash
