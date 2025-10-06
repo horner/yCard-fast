@@ -131,7 +131,7 @@ jobs:
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
     
     - name: Build project
-      run: ./build.sh
+      run: make ci
     
     - name: Run conformance tests
       run: |
@@ -168,7 +168,7 @@ jobs:
       run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
     
     - name: Build release artifacts
-      run: ./build.sh
+      run: make ci
     
     - name: Create release
       uses: softprops/action-gh-release@v1
