@@ -1,0 +1,16 @@
+version: 1
+imię: Jan Kowalski
+dom: "+48123456789"
+praca: "+48987654321"
+komórka: "+48555123456"
+e-mail:
+  - address: "jan@home.pl"
+    type: domowy
+  - address: "jan.kowalski@firma.pl"
+    type: służbowy
+adres:
+  - street: "ul. Marszałkowska 123"
+    city: "Warszawa"
+    country: "Polska"
+    type: dom
+kierownik: "Anna Nowak"

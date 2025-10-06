@@ -1,0 +1,10 @@
+version: 1
+imię: Jan Kowalski
+telefon: +48 123 456 789
+komórka: +48 987 654 321
+e-mail: jan.kowalski@example.pl
+adres: |
+  ul. Marszałkowska 1
+  00-001 Warszawa
+  Polska
+kierownik: Anna Nowak

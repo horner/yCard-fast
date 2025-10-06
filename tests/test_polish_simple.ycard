@@ -1,0 +1,5 @@
+version: 1
+imię: "Jan Kowalski"
+komórka: "+48555123456"
+e-mail: "jan@example.pl"
+kierownik: "Anna Nowak"

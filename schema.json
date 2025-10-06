@@ -10,31 +10,31 @@
       "variants": [
         {
           "canonical": "home",
-          "aliases": ["casa", "domicile", "自宅"]
+          "aliases": ["casa", "domicile", "自宅", "dom", "domowy"]
         },
         {
           "canonical": "work", 
-          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+          "aliases": ["trabajo", "travail", "bureau", "勤務", "praca", "służbowy", "sluzbowy"]
         },
         {
           "canonical": "mobile",
-          "aliases": ["cell", "móvil", "portable", "携帯"]
+          "aliases": ["cell", "móvil", "portable", "携帯", "komórka", "komorka"]
         },
         {
           "canonical": "fax",
-          "aliases": []
+          "aliases": ["faks"]
         },
         {
           "canonical": "pager",
-          "aliases": []
+          "aliases": ["pager"]
         },
         {
           "canonical": "main",
-          "aliases": ["principal"]
+          "aliases": ["principal", "główny", "glowny"]
         },
         {
           "canonical": "other",
-          "aliases": ["otro", "autre", "その他"]
+          "aliases": ["otro", "autre", "その他", "inny", "inne"]
         }
       ]
     },
@@ -43,15 +43,15 @@
       "variants": [
         {
           "canonical": "home",
-          "aliases": ["casa", "domicile", "自宅"]
+          "aliases": ["casa", "domicile", "自宅", "dom", "domowy"]
         },
         {
           "canonical": "work",
-          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+          "aliases": ["trabajo", "travail", "bureau", "勤務", "praca", "służbowy", "sluzbowy"]
         },
         {
           "canonical": "other",
-          "aliases": ["otro", "autre", "その他"]
+          "aliases": ["otro", "autre", "その他", "inny", "inne"]
         }
       ]
     },
@@ -60,15 +60,15 @@
       "variants": [
         {
           "canonical": "home",
-          "aliases": ["casa", "domicile", "自宅"]
+          "aliases": ["casa", "domicile", "自宅", "dom", "domowy"]
         },
         {
           "canonical": "work",
-          "aliases": ["trabajo", "travail", "bureau", "勤務"]
+          "aliases": ["trabajo", "travail", "bureau", "勤務", "praca", "służbowy", "sluzbowy"]
         },
         {
           "canonical": "other",
-          "aliases": ["otro", "autre", "その他"]
+          "aliases": ["otro", "autre", "その他", "inny", "inne"]
         }
       ]
     },
@@ -131,37 +131,37 @@
         "key": "mobile",
         "expandsTo": "phones",
         "defaultType": "mobile",
-        "aliases": ["cell", "móvil", "portable", "携帯"]
+        "aliases": ["cell", "móvil", "portable", "携帯", "komórka", "komorka"]
       },
       {
         "key": "home", 
         "expandsTo": "phones",
         "defaultType": "home",
-        "aliases": ["casa", "domicile", "自宅"]
+        "aliases": ["casa", "domicile", "自宅", "dom", "domowy"]
       },
       {
         "key": "work",
         "expandsTo": "phones", 
         "defaultType": "work",
-        "aliases": ["trabajo", "travail", "bureau", "勤務"]
+        "aliases": ["trabajo", "travail", "bureau", "勤務", "praca", "służbowy", "sluzbowy"]
       },
       {
         "key": "fax",
         "expandsTo": "phones",
         "defaultType": "fax",
-        "aliases": []
+        "aliases": ["faks"]
       },
       {
         "key": "pager",
         "expandsTo": "phones",
         "defaultType": "pager", 
-        "aliases": []
+        "aliases": ["pager"]
       },
       {
         "key": "main",
         "expandsTo": "phones",
         "defaultType": "main",
-        "aliases": ["principal"]
+        "aliases": ["principal", "główny", "glowny"]
       }
     ],
     "emailShorthands": [
@@ -169,7 +169,7 @@
         "key": "email",
         "expandsTo": "emails",
         "defaultType": "other",
-        "aliases": []
+        "aliases": ["e-mail", "poczta"]
       }
     ]
   },
@@ -400,6 +400,66 @@
           "中国": "CN"
         },
         "honorifics": ["さん", "様", "先生", "博士"]
+      },
+      "pl": {
+        "description": "Polish language aliases",
+        "keyAliases": {
+          "imię": "name",
+          "imie": "name",
+          "nazwisko": "name",
+          "nazwa": "name",
+          "pełne_imię": "name",
+          "pelne_imie": "name",
+          "praca": "phones",
+          "telefon": "phones",
+          "tel": "phones",
+          "komórka": "phones",
+          "komorka": "phones",
+          "adres": "addresses",
+          "e-mail": "emails",
+          "email": "emails",
+          "poczta": "emails",
+          "kierownik": "manager",
+          "szef": "manager",
+          "przełożony": "manager",
+          "przelozony": "manager",
+          "menedżer": "manager",
+          "menedzer": "manager"
+        },
+        "typeAliases": {
+          "dom": "home",
+          "domowy": "home",
+          "praca": "work",
+          "służbowy": "work",
+          "sluzbowy": "work",
+          "komórka": "mobile",
+          "komorka": "mobile",
+          "telefon_komórkowy": "mobile",
+          "telefon_komorkowy": "mobile",
+          "faks": "fax",
+          "pager": "pager",
+          "główny": "main",
+          "glowny": "main",
+          "inny": "other",
+          "inne": "other"
+        },
+        "countries": {
+          "stany_zjednoczone": "US",
+          "stany zjednoczone": "US",
+          "usa": "US",
+          "wielka_brytania": "GB",
+          "wielka brytania": "GB",
+          "anglia": "GB",
+          "francja": "FR",
+          "niemcy": "DE",
+          "hiszpania": "ES",
+          "włochy": "IT",
+          "wlochy": "IT",
+          "polska": "PL",
+          "japonia": "JP",
+          "chiny": "CN"
+        },
+        "honorifics": ["Pan", "Pani", "Dr", "Prof.", "Mgr", "Inż.", "Inz."]
       }
     }
   }
